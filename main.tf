@@ -1,8 +1,6 @@
 # Define provider
 provider "aws" {
-  access_key = ""
-  secret_key = ""
-  region = "eu-west-1"
+  region = "ap-south-1"
 }
 
 # Create VPC
@@ -19,7 +17,7 @@ resource "aws_internet_gateway" "my_igw" {
 resource "aws_subnet" "public_subnet" {
   vpc_id            = aws_vpc.my_vpc.id
   cidr_block        = "10.100.1.0/24"
-  availability_zone = "eu-west-1c" # Specify availability zone
+  availability_zone = "ap-south-1a" # Specify availability zone
   map_public_ip_on_launch = true
 }
 
@@ -72,7 +70,10 @@ resource "aws_instance" "my_instance" {
   instance_type   = "t2.micro"
   subnet_id       = aws_subnet.public_subnet.id
   security_groups = [aws_security_group.my_security_group.id]
-
+  count           = 1
+  tags ={
+  Name = "my_terraform_htppd"
+  }
   # Add key name if using SSH key pair
-  key_name = "ireland"
+  key_name = "nvkey"
 }
